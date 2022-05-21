@@ -1,0 +1,126 @@
+.container{
+  background-color: rgb(238, 238, 238);
+  width: 600px;
+  height:1000px;
+  border: 1px solid #2d2d2d;
+
+}
+.main-div{
+  display: flexbox;
+  align-items: left;
+}
+.checked-item {
+  text-decoration: line-through;
+}
+.each-todo{
+  font-size: large;
+}
+h1{
+  color: rgb(255, 187, 0);
+  font-weight: bold;
+}
+h3{
+  font-size: 30px ;
+}
+.h4{  /*for date */
+  font-size: 25px;
+  color: red;
+  padding-left: 20px;
+}
+input[type="checkbox"] {
+  width: 20px;                         
+  height: 20px;                        
+  clip-path: circle(40%);   /* Set the clip path of circle*/
+}
+.todo-line{
+  display: flexbox;
+  justify-content: baseline;
+}
+.del{
+  text-align: right;
+  font-size: 20;
+  color: red;
+}
+.each-todo{
+  display: flex;
+  justify-content: space-between;
+}
+@import 'antd/dist/antd.css';
+
+
+.ant-layout-header,
+.ant-layout-footer {
+  background-color: rgb(238, 238, 238);
+  color: #fff;
+  justify-content: left;
+}
+.ant-layout-footer {
+  line-height: 1.5;
+}
+.ant-layout-header{
+  min-height: 400px;
+  min-width: 570px;
+}
+
+.ant-layout-content {
+  background-color: rgb(238, 238, 238);
+  color: #fff;
+  min-height: 520px;
+  /* line-height: 500px; */
+}
+
+.today-scheduled{
+  display: flex;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+.flex-child{
+  flex:1;
+}
+.flex:first-child{
+  margin-right: 20px;
+}
+.today,.scheduled,.all{
+  border-radius: 10px;
+}
+.add-list
+{
+  float:right;
+}
+.all-flagged{
+  display: flex;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+.flex-child{
+  flex:1;
+}
+.flex:first-child{
+  margin-right: 20px;
+}
+.today,.scheduled,.all,.flagged{
+  border-radius: 10px;
+}
+.add-list-link{
+  font-size: large;
+  color:rgb(0, 63, 156)
+}
+.add-list-btn,.delete-btn{
+
+    background: transparent;
+    border: none !important;
+}
+.check{
+  display: inline;
+}
+.each-items{
+  display: flex;
+  justify-content: space-between;
+}
+.item{
+  font-size: 25px;
+  padding-left: 20px;
+}
+.add-date{
+  display: inline-block;
+}
