@@ -1,21 +1,20 @@
-//data storing
-import { createStore } from "redux";
+import { createStore, applyMiddleware, compose } from "redux";
+import thunk from "redux-thunk";
+import rootReducer from "./reducers";
 
-import rootReducer from "./reducers/index";
+const initialState = {};
 
-import {persistStore, persistReducer} from "redux-persist";
-import storage from "redux-persist/lib/storage";
+const middleware = [thunk];
 
-const persistConfig={
-    key:'root',
-    storage,
-}
+const store = createStore(
+  rootReducer,
+  initialState,
+  compose(
+    applyMiddleware(...middleware),
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  )
+);
 
-   //global store
-   const persistedReducer=persistReducer(persistConfig, rootReducer)
-  export const store= createStore(persistedReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
-
-// export const store=createStore(persistedReducer);
-export const persistor= persistStore(store)
+export default store;
 
 

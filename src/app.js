@@ -4,6 +4,8 @@ import Todo from "./components/reminders"
 import All from "./components/all"
 import Scheduled from "./components/scheduled"
 import Today from "./components/today"
+import { Provider } from 'react-redux';
+import store from './store';
 
 
 
@@ -11,6 +13,7 @@ import Home from './components/home'
 const App=()=> {
 
     return ( 
+      <Provider store={store}>
         <BrowserRouter>
       <Routes>
         
@@ -26,6 +29,7 @@ const App=()=> {
         
       </Routes>
     </BrowserRouter>
+    </Provider>
         
      );
 }
