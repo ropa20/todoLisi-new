@@ -2,22 +2,38 @@ import React, { useEffect, useState } from "react";
 import {DeleteFilled} from "@ant-design/icons"
 import { Checkbox } from 'antd';
 import { useSelector, useDispatch } from "react-redux";
-import { addTodo, addTitle, deleteTodo, checkTodo, addDate } from "../actions/index";
+import { bindActionCreators } from "redux";
+import { actionCreators } from "../actions/index";
 import { DatePicker } from 'antd';
 import Title from "./title"
 
 import "../index.css";
 
-
 const Todo =()=> {
-
-    const [inputData, setInputData]=useState("");
     const [inputDate, setInputDate]= useState("");
-    const list=useSelector((state)=>state.todoReducer.list);
-    const date=useSelector((state)=>state.todoReducer.date);
-
-    const dispatch = useDispatch();
     const [checked, setChecked] = useState([]);
+
+    //Dispatch
+    const dispatch = useDispatch();
+    const { addTodo, deleteTodo } = bindActionCreators(actionCreators,dispatch)
+
+    const list=useSelector((state)=>state.todoReducer.list);
+
+    const [values, setValues] = useState({
+        title: "",
+        description: "",
+        loading: false,
+        error: "",
+      });
+    
+      const {
+        title,
+        description,
+        loading,
+        error,
+      } = values;
+
+
 
     const handleCheck = (event) => {
         var updatedList = [...checked];
@@ -28,62 +44,106 @@ const Todo =()=> {
         }
         setChecked(updatedList);
       };
-
-    
 // Return classes based on whether item is checked
     const isChecked = (item) =>
         checked.includes(item) ? "checked-item" : "not-checked-item";
 
-console.log({date});
+    const onSubmit = (event) => {
+        event.preventDefault();
+        setValues({ ...values, error: "", loading: true });
+        const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+
+        const newTodo ={
+            todo_title: values.title,
+            todo_description: values.description,
+            timestamp: new Date().toLocaleDateString('en-us', options),
+        }
+        console.log(newTodo)
+        addTodo(newTodo)
+        setValues({
+            ...values,
+            title: "",
+            description: "",
+            loading: false,
+          });
+      };
+
+    const handleChange = (name) => (event) => {
+        const value =  event.target.value;
+        setValues({ ...values, [name]: value });
+    };
+
+    const createTodoForm = () => (
+        <form>
+          <div className="form-group">
+            <input
+              onChange={handleChange("title")}
+              name="photo"
+              className="form-control my-3"
+              placeholder="Title"
+              value={title}
+            />
+          </div>
+          <div className="form-group">
+            <textarea
+              onChange={handleChange("description")}
+              name="description"
+              className="form-control my-3"
+              placeholder="Description"
+              value={description}
+            />
+          </div>
+    
+          <button
+            type="submit"
+            onClick={onSubmit}
+            className="btn btn-outline-success my-3"
+          >
+            Create Todo
+          </button>
+        </form>
+      );
+
+      const showList = () => {
+        return(
+            list.map((elem,index)=>{
+                return(
+                    <div className="each-line" key={index}>
+                    <div className="each-items" >
+                        <span className="check">
+                            <Checkbox  type="checkbox" onChange={handleCheck}/>
+                                <span className={isChecked(elem)}>
+                                    <span className="item">{elem.data.todo_title}</span>
+                                </span>
+                                <div className="date">
+                                    <h4>{elem.data.timestamp}</h4>
+                                </div>
+                                <div className="date">
+                                    <h4>{elem.data.todo_description}</h4>
+                                </div>
+                        </span>
+                        <button
+                            className="delete-btn"
+                            type="button"  
+                            onClick={()=> dispatch(deleteTodo(elem.id))}>
+                                <span style={{fontSize:25, color: "tomato"}}><DeleteFilled/></span>
+                        </button>
+                    </div>
+                    <hr></hr>
+                    </div>
+                )
+            })
+        )
+      }
+
     return ( 
         <div className="container">
             <Title />
             <div className="add-item">
-                <input type="text" class="form-control" placeholder="" 
-                value={inputData} 
-                onChange={(e)=>setInputData(e.target.value)}/>
-                <div className="add-date">
-                <button className="item-tbn" type="button" id="button-addon1" 
-                onClick={()=> dispatch(addTodo(inputData), setInputData(''))}>
-                    Add
-                </button>
-                <span style={{ display: 'block', width: 700,  }}>
-                    <DatePicker value={inputDate} onChange={date=>setInputDate(date)} />
-                    <button className="date-btn" type="button" id="button-addon2" 
-                onClick={()=> dispatch(addDate(inputDate))}>
-                    Add date
-                </button>
-                </span>
-                </div>
+            {createTodoForm()}
             </div>
-
             <div className="show">
-                {
-                list.map((elem)=>{
-                    return(
-                        <div className="each-line">
-                        <div className="each-items" key={elem.id}>
-                            <span className="check">
-                                <Checkbox value={elem} type="checkbox" onChange={handleCheck}/>
-                                    <span className={isChecked(elem)}>
-                                        <span className="item">{elem.data}</span>
-                                    </span>
-                                    <div className="date">
-                                        
-                                        <h4>{date}</h4>
-                                    </div>
-                            </span>
-                            <button className="delete-btn" type="button"  
-                            onClick={()=> dispatch(deleteTodo(elem.id))}>
-                                <span style={{fontSize:25, color: "tomato"}}><DeleteFilled/></span>
-                            </button>
-                        </div>
-                        <hr></hr>
-                        </div>
-                        )
-                    })
-                }
-                
+                {showList()}
             </div>
         </div>
      );

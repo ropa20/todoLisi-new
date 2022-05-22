@@ -11,12 +11,9 @@ const todoReducer=(state=initialData, action)=>{
         const {id, data} = action.payload;
         return{
             ...state, //previos state
-            list:[...state.list,
-                {       //action taken, new state
-                    id:id,
-                    data:data,
-            }]
+            list:[...state.list,action.payload]
         }
+        
         case "DELETE_TODO" :
 
         const newList=state.list.filter((elem)=>elem.id !== action.id)
